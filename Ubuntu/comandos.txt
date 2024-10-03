@@ -1,0 +1,25 @@
+sudo apt -y update
+sudo apt - upgrade
+sudo apt install lightdm
+sudo apt install x11vnc
+nano /usr/local/bin/start.sh
+#!/bin/bash
+/usr/bin/x11vnc -forever -nopw -display :0
+sudo chmod +x /usr/local/bin/start-x11vnc.sh
+sudo nano /etc/systemd/system/x11vnc,service
+[Unit]
+Description=Start x11vnc at startup
+After=display-manager.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/start-x11vnc.sh
+Restart=always
+User=ssl
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl enable x11vnc
+sudo systemctl start x11vnc
